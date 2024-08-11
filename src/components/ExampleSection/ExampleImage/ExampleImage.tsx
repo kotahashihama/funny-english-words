@@ -2,6 +2,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { useContext, useEffect } from 'react';
 import { useGetExampleImage } from '../../../api/useGetExampleImage';
 import { AppContext } from '../../AppProvider/AppProvider';
+import { Error } from '../../Error/Error';
 
 export const ExampleImage = () => {
   const { searchWord, exampleSentence } = useContext(AppContext);
@@ -9,6 +10,7 @@ export const ExampleImage = () => {
     data: exampleSentenceImageData,
     refetch: refetchExampleSentenceImageData,
     isLoading,
+    isError,
   } = useGetExampleImage(searchWord, exampleSentence);
   const imageUrl = exampleSentenceImageData?.data[0].url;
 
@@ -24,6 +26,10 @@ export const ExampleImage = () => {
         <CircularProgress />
       </Box>
     );
+  }
+
+  if (isError) {
+    return <Error onClick={() => refetchExampleSentenceImageData} />;
   }
 
   return (

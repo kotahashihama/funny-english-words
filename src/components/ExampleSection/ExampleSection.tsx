@@ -9,6 +9,7 @@ import { useContext, useEffect } from 'react';
 import { useGetExampleSentence } from '../../api/useGetExampleSentence';
 import { AppContext } from '../AppProvider/AppProvider';
 import { ExampleImage } from './ExampleImage/ExampleImage';
+import { Error } from '../Error/Error';
 
 const GenerateButton = () => {
   const { searchWord } = useContext(AppContext);
@@ -35,8 +36,12 @@ export const ExampleSection = () => {
   const { wordMeaningData, searchWord, setExampleSentence } =
     useContext(AppContext);
 
-  const { data: exampleSentenceData, isLoading } =
-    useGetExampleSentence(searchWord);
+  const {
+    data: exampleSentenceData,
+    refetch: refetchExampleSentenceData,
+    isLoading,
+    isError,
+  } = useGetExampleSentence(searchWord);
   const parsedExampleSentenceData: {
     en: string;
     ja: string;
@@ -57,6 +62,10 @@ export const ExampleSection = () => {
         </Box>
       </>
     );
+  }
+
+  if (isError) {
+    return <Error onClick={() => refetchExampleSentenceData} />;
   }
 
   const hasNoMeaningData =

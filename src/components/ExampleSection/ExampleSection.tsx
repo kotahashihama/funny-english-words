@@ -1,4 +1,10 @@
-import { Box, Button, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  Typography,
+} from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import OpenAI from 'openai';
 import { useContext, useEffect } from 'react';
@@ -32,20 +38,23 @@ export const ExampleSection = () => {
     }
   `;
 
-  const { data: exampleSentenceData, refetch: refetchExampleSentenceData } =
-    useQuery<OpenAI.Chat.Completions.ChatCompletion>({
-      queryKey: ['exampleSentence', searchWord],
-      queryFn: async () => {
-        return await openAi.chat.completions.create({
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt },
-          ],
-          model: 'gpt-4o-mini',
-        });
-      },
-      enabled: false,
-    });
+  const {
+    data: exampleSentenceData,
+    refetch: refetchExampleSentenceData,
+    isLoading,
+  } = useQuery<OpenAI.Chat.Completions.ChatCompletion>({
+    queryKey: ['exampleSentence', searchWord],
+    queryFn: async () => {
+      return await openAi.chat.completions.create({
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        model: 'gpt-4o-mini',
+      });
+    },
+    enabled: false,
+  });
 
   const parsedData: {
     en: string;
@@ -55,6 +64,14 @@ export const ExampleSection = () => {
   useEffect(() => {
     if (parsedData) setExampleSentence(parsedData.ja);
   }, [parsedData]);
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   const hasNoMeaningData =
     !wordMeaningData ||
@@ -101,8 +118,16 @@ export const ExampleSection = () => {
 
         <Box fontSize="14px">
           <Box sx={{ marginBottom: '32px' }}>
-            <Box sx={{ marginBottom: '20px' }}>{parsedData.en}</Box>
-            <Box>訳: {parsedData.ja}</Box>
+            <Box
+              sx={{
+                marginBottom: '20px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+              }}
+            >
+              {parsedData.en}
+            </Box>
+            <Box>{parsedData.ja}</Box>
           </Box>
 
           <ExampleImage />

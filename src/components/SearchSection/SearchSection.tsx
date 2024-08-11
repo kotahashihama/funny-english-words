@@ -2,7 +2,7 @@ import { Refresh } from '@mui/icons-material';
 import { Box, IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '../AppProvider/AppProvider';
 
 type GetRandomWordResponse = string[] | undefined;
@@ -36,8 +36,11 @@ export type GetWordMeaningsResponse =
 
 export const SearchSection = () => {
   const [inputWord, setInputWord] = useState<string>('');
+  const [inputError, setInputError] = useState(false);
   const { searchWord, setSearchWord, setWordMeaningData } =
     useContext(AppContext);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const { refetch: refetchWordMeanings } = useQuery<GetWordMeaningsResponse>({
     queryKey: ['searchWord', searchWord],
     queryFn: async () => {
@@ -72,8 +75,34 @@ export const SearchSection = () => {
     })();
   }, [searchWord]);
 
+  const validateInput = (value: string) => {
+    return /^[a-zA-Z]*$/.test(value);
+  };
+
+  const onChangeInputWord = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputWord(newValue);
+    if (validateInput(newValue)) {
+      setInputError(false);
+    } else {
+      setInputError(true);
+    }
+  };
+
   const onClickSearch = () => {
-    setSearchWord(inputWord);
+    if (!inputError && inputWord) {
+      setSearchWord(inputWord);
+    }
+  };
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      if (!inputError && inputWord) {
+        onClickSearch();
+      } else {
+        e.preventDefault();
+      }
+    }
   };
 
   const onClickRandomWord = async (word: string) => {
@@ -109,10 +138,23 @@ export const SearchSection = () => {
               background: '#fff',
             },
           }}
+          inputRef={inputRef}
+          error={inputError}
           value={inputWord}
-          onChange={(e) => setInputWord(e.target.value)}
+          onChange={onChangeInputWord}
+          onKeyPress={onKeyPress}
+          helperText={inputError ? '英字のみ入力可能です' : ''}
+          InputProps={{
+            inputProps: {
+              pattern: '^[a-zA-Z]*$',
+            },
+          }}
         />
-        <Button variant="contained" onClick={onClickSearch}>
+        <Button
+          variant="contained"
+          onClick={onClickSearch}
+          disabled={inputError || !inputWord}
+        >
           検索
         </Button>
       </Box>

@@ -13,6 +13,8 @@ type AppContextType = {
   setSearchWord: Dispatch<SetStateAction<string>>;
   wordMeaningData: GetWordMeaningResponse;
   setWordMeaningData: Dispatch<SetStateAction<GetWordMeaningResponse>>;
+  exampleSentence: string;
+  setExampleSentence: Dispatch<SetStateAction<string>>;
 };
 
 export const AppContext = createContext<AppContextType>({
@@ -20,6 +22,8 @@ export const AppContext = createContext<AppContextType>({
   setSearchWord: () => {},
   wordMeaningData: undefined,
   setWordMeaningData: () => {},
+  exampleSentence: '',
+  setExampleSentence: () => {},
 });
 
 export const AppProvider = ({ children }: PropsWithChildren) => {
@@ -27,6 +31,7 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
     useState<AppContextType['searchWord']>('');
   const [wordMeaningData, setWordMeaningData] =
     useState<AppContextType['wordMeaningData']>(undefined);
+  const [exampleSentence, setExampleSentence] = useState<string>('');
 
   const value = useMemo(() => {
     return {
@@ -34,8 +39,10 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
       setSearchWord,
       wordMeaningData,
       setWordMeaningData,
+      exampleSentence,
+      setExampleSentence,
     };
-  }, [searchWord, setSearchWord, wordMeaningData, setWordMeaningData]);
+  }, [searchWord, wordMeaningData, exampleSentence]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

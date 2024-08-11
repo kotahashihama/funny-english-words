@@ -1,16 +1,39 @@
 import { Box, Paper, TextField, Typography } from '@mui/material';
-
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 function App() {
   const { data: randomWords } = useQuery({
     queryKey: ['randomWords'],
-    queryFn: () =>
-      fetch('https://random-word-api.herokuapp.com/word?number=5').then((res) =>
-        res.json()
-      ),
+    queryFn: async () => {
+      return (
+        await fetch('https://random-word-api.herokuapp.com/word?number=5')
+      ).json();
+    },
   });
+
+  const [searchedWord, setSearchedWord] = useState('');
+  const { data: searchedWordData, refetch } = useQuery({
+    queryKey: ['searchedWord', searchedWord],
+    queryFn: async () => {
+      return (
+        await fetch(`https://wordsapiv1.p.rapidapi.com/words/${searchedWord}`, {
+          headers: {
+            'x-rapidapi-host': import.meta.env.VITE_X_RAPIDAPI_HOST,
+            'x-rapidapi-key': import.meta.env.VITE_X_RAPIDAPI_KEY,
+          },
+        })
+      ).json();
+    },
+    enabled: false,
+  });
+
+  const onClickSearch = () => {
+    if (searchedWord) refetch();
+  };
+
+  console.log(searchedWordData);
 
   return (
     <Box sx={{ margin: '100px auto 0', width: '680px' }}>
@@ -48,8 +71,12 @@ function App() {
                 background: '#fff',
               },
             }}
+            value={searchedWord}
+            onChange={(e) => setSearchedWord(e.target.value)}
           />
-          <Button variant="contained">検索</Button>
+          <Button variant="contained" onClick={onClickSearch}>
+            検索
+          </Button>
         </Box>
 
         <Box

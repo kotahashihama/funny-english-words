@@ -6,6 +6,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { AppProvider } from './components/AppProvider/AppProvider';
 
 const queryClient = new QueryClient();
 const theme = createTheme({
@@ -20,7 +21,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <App />
+        <AppProvider>
+          <App />
+        </AppProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>

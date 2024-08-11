@@ -1,15 +1,16 @@
 import { Box, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
+import { AppContext } from '../AppProvider/AppProvider';
 
 export const SearchSection = () => {
-  const [searchedWord, setSearchedWord] = useState('');
-  const { data: searchedWordData, refetch } = useQuery({
-    queryKey: ['searchedWord', searchedWord],
+  const { searchWord, setSearchWord } = useContext(AppContext);
+  const { data: searchWordData, refetch } = useQuery({
+    queryKey: ['searchWord', searchWord],
     queryFn: async () => {
       return (
-        await fetch(`https://wordsapiv1.p.rapidapi.com/words/${searchedWord}`, {
+        await fetch(`https://wordsapiv1.p.rapidapi.com/words/${searchWord}`, {
           headers: {
             'x-rapidapi-host': import.meta.env.VITE_X_RAPIDAPI_HOST,
             'x-rapidapi-key': import.meta.env.VITE_X_RAPIDAPI_KEY,
@@ -34,20 +35,20 @@ export const SearchSection = () => {
   };
 
   const onClickRandomWord = (word: string) => {
-    setSearchedWord(word);
+    setSearchWord(word);
   };
 
   const performSearch = useCallback(() => {
-    if (searchedWord) refetch();
-  }, [searchedWord, refetch]);
+    if (searchWord) refetch();
+  }, [searchWord, refetch]);
 
   useEffect(() => {
-    if (searchedWord) {
+    if (searchWord) {
       performSearch();
     }
-  }, [searchedWord, performSearch]);
+  }, [searchWord, performSearch]);
 
-  console.log(searchedWordData);
+  console.log(searchWordData);
 
   return (
     <Box
@@ -73,8 +74,8 @@ export const SearchSection = () => {
               background: '#fff',
             },
           }}
-          value={searchedWord}
-          onChange={(e) => setSearchedWord(e.target.value)}
+          value={searchWord}
+          onChange={(e) => setSearchWord(e.target.value)}
         />
         <Button variant="contained" onClick={onClickSearch}>
           検索

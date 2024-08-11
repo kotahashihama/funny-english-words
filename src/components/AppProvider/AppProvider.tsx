@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { GetWordMeaningsResponse } from '../SearchSection/SearchSection';
+import { GetWordMeaningsResponse } from '../../api/useGetWordMeanings';
 
 type AppContextType = {
   searchWord: string;

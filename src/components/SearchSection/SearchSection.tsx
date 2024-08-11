@@ -1,38 +1,10 @@
 import { Refresh } from '@mui/icons-material';
 import { Box, IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
-import { useQuery } from '@tanstack/react-query';
 import { useContext, useEffect, useRef, useState } from 'react';
+import { useGetRandomWords } from '../../api/useGetRandomWords';
+import { useGetWordMeanings } from '../../api/useGetWordMeanings';
 import { AppContext } from '../AppProvider/AppProvider';
-
-type GetRandomWordResponse = string[] | undefined;
-export type GetWordMeaningsResponse =
-  | {
-      success: true;
-      frequency: number;
-      pronunciation: {
-        all: string;
-      };
-      results?: {
-        antonyms?: string[];
-        definition: string;
-        derivation?: string[];
-        examples: string[];
-        partOfSpeech: string | null;
-        similarTo: string[];
-        synonyms?: string[];
-      }[];
-      syllables?: {
-        count: number;
-        list: string[];
-      };
-      word: string;
-    }
-  | {
-      success: false;
-      message: string;
-    }
-  | undefined;
 
 export const SearchSection = () => {
   const [inputWord, setInputWord] = useState<string>('');
@@ -41,30 +13,10 @@ export const SearchSection = () => {
     useContext(AppContext);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { refetch: refetchWordMeanings } = useQuery<GetWordMeaningsResponse>({
-    queryKey: ['searchWord', searchWord],
-    queryFn: async () => {
-      return (
-        await fetch(`https://wordsapiv1.p.rapidapi.com/words/${searchWord}`, {
-          headers: {
-            'x-rapidapi-host': import.meta.env.VITE_X_RAPIDAPI_HOST,
-            'x-rapidapi-key': import.meta.env.VITE_X_RAPIDAPI_KEY,
-          },
-        })
-      ).json();
-    },
-    enabled: false,
-  });
+  const { refetch: refetchWordMeanings } = useGetWordMeanings(searchWord);
 
   const { data: randomWords, refetch: refetchRandomWords } =
-    useQuery<GetRandomWordResponse>({
-      queryKey: ['randomWords'],
-      queryFn: async () => {
-        return (
-          await fetch('https://random-word-api.herokuapp.com/word?number=5')
-        ).json();
-      },
-    });
+    useGetRandomWords();
 
   useEffect(() => {
     (async () => {

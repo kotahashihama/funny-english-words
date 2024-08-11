@@ -1,11 +1,12 @@
-import { Box, TextField } from '@mui/material';
+import { Box, IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useContext } from 'react';
 import { AppContext } from '../AppProvider/AppProvider';
+import { Refresh } from '@mui/icons-material';
 
 type GetRandomWordResponse = string[] | undefined;
-export type GetWordMeaningResponse =
+export type GetWordMeaningsResponse =
   | {
       success: true;
       frequency: number;
@@ -36,7 +37,7 @@ export type GetWordMeaningResponse =
 export const SearchSection = () => {
   const { searchWord, setSearchWord, setWordMeaningData } =
     useContext(AppContext);
-  const { refetch } = useQuery<GetWordMeaningResponse>({
+  const { refetch: refetchWordMeanings } = useQuery<GetWordMeaningsResponse>({
     queryKey: ['searchWord', searchWord],
     queryFn: async () => {
       return (
@@ -51,21 +52,22 @@ export const SearchSection = () => {
     enabled: false,
   });
 
-  const { data: randomWords } = useQuery<GetRandomWordResponse>({
-    queryKey: ['randomWords'],
-    queryFn: async () => {
-      return (
-        await fetch('https://random-word-api.herokuapp.com/word?number=5')
-      ).json();
-    },
-  });
+  const { data: randomWords, refetch: refetchRandomWords } =
+    useQuery<GetRandomWordResponse>({
+      queryKey: ['randomWords'],
+      queryFn: async () => {
+        return (
+          await fetch('https://random-word-api.herokuapp.com/word?number=5')
+        ).json();
+      },
+    });
 
   const performSearch = useCallback(async () => {
     if (searchWord) {
-      const { data } = await refetch();
+      const { data } = await refetchWordMeanings();
       setWordMeaningData(data);
     }
-  }, [searchWord, refetch, setWordMeaningData]);
+  }, [searchWord, refetchWordMeanings, setWordMeaningData]);
 
   const onClickSearch = () => {
     performSearch();
@@ -73,6 +75,10 @@ export const SearchSection = () => {
 
   const onClickRandomWord = async (word: string) => {
     setSearchWord(word);
+  };
+
+  const onClickRefreshRandomWords = () => {
+    refetchRandomWords();
   };
 
   return (
@@ -120,6 +126,9 @@ export const SearchSection = () => {
             {word}
           </Button>
         ))}
+        <IconButton onClick={onClickRefreshRandomWords}>
+          <Refresh />
+        </IconButton>
       </Box>
     </Box>
   );

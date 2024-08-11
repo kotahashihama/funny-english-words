@@ -3,14 +3,18 @@ import { useContext } from 'react';
 import { AppContext } from '../AppProvider/AppProvider';
 
 export const MeaningSection = () => {
-  const { wordMeaningData } = useContext(AppContext);
+  const { searchWord, wordMeaningData } = useContext(AppContext);
 
   const hasNoMeaningData =
     !wordMeaningData ||
     ('success' in wordMeaningData && !wordMeaningData.success) ||
     !wordMeaningData.results;
   if (hasNoMeaningData) {
-    return null;
+    return (
+      <Paper sx={{ marginBottom: '48px', padding: '24px' }}>
+        ごめんなさい、単語「{searchWord}」に関するデータが見つかりませんでした。
+      </Paper>
+    );
   }
 
   return (

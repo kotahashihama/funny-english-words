@@ -6,13 +6,13 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { GetWordMeaningResponse } from '../SearchSection/SearchSection';
+import { GetWordMeaningsResponse } from '../SearchSection/SearchSection';
 
 type AppContextType = {
   searchWord: string;
   setSearchWord: Dispatch<SetStateAction<string>>;
-  wordMeaningData: GetWordMeaningResponse;
-  setWordMeaningData: Dispatch<SetStateAction<GetWordMeaningResponse>>;
+  wordMeaningData: GetWordMeaningsResponse;
+  setWordMeaningData: Dispatch<SetStateAction<GetWordMeaningsResponse>>;
   exampleSentence: string;
   setExampleSentence: Dispatch<SetStateAction<string>>;
 };

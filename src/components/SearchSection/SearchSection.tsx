@@ -1,7 +1,7 @@
 import { Box, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const SearchSection = () => {
   const [searchedWord, setSearchedWord] = useState('');
@@ -30,8 +30,22 @@ export const SearchSection = () => {
   });
 
   const onClickSearch = () => {
-    if (searchedWord) refetch();
+    performSearch();
   };
+
+  const onClickRandomWord = (word: string) => {
+    setSearchedWord(word);
+  };
+
+  const performSearch = useCallback(() => {
+    if (searchedWord) refetch();
+  }, [searchedWord, refetch]);
+
+  useEffect(() => {
+    if (searchedWord) {
+      performSearch();
+    }
+  }, [searchedWord, performSearch]);
 
   console.log(searchedWordData);
 
@@ -76,7 +90,9 @@ export const SearchSection = () => {
         }}
       >
         {randomWords?.map((word: string) => (
-          <Button key={word}>{word}</Button>
+          <Button key={word} onClick={() => onClickRandomWord(word)}>
+            {word}
+          </Button>
         ))}
       </Box>
     </Box>

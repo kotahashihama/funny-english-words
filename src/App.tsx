@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
+      <div>Funny English Words</div>
+
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <input type="text" />
+        <button>検索</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <div>
+        <div>この単語を検索:</div>
+        <div>
+          <button>applaud</button>
+          <button>immigrate</button>
+          <button>mirror</button>
+          <button>foodie</button>
+          <button>sophisticated</button>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <div>
+        <div>applaud 【動詞】</div>
+        <div>
+          <div>
+            <div>自動:</div>
+            <div>拍手［称賛］する</div>
+          </div>
+
+          <div>
+            <div>他動:</div>
+            <div>〔～に〕拍手を送る、〔～を〕称賛する</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div>この単語の使い方</div>
+
+        <div>
+          <div>例文</div>
+          <div>画像</div>
+        </div>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

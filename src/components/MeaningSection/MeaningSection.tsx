@@ -34,7 +34,7 @@ export const MeaningSection = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {wordMeaningData.results?.map((result, i) => (
             <Box key={i}>
-              <Box>[{result.partOfSpeech}]</Box>
+              <Box>[{result.partOfSpeech || '?'}]</Box>
               <Box>{result.definition}</Box>
             </Box>
           ))}

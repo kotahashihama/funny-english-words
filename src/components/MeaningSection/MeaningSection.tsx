@@ -5,6 +5,10 @@ import { AppContext } from '../AppProvider/AppProvider';
 export const MeaningSection = () => {
   const { searchWord, wordMeaningData } = useContext(AppContext);
 
+  if (!searchWord) {
+    return null;
+  }
+
   const hasNoMeaningData =
     !wordMeaningData ||
     ('success' in wordMeaningData && !wordMeaningData.success) ||

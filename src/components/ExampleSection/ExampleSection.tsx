@@ -100,7 +100,7 @@ export const ExampleSection = () => {
         </Typography>
 
         <Box fontSize="14px">
-          <Box sx={{ marginBottom: '20px' }}>
+          <Box sx={{ marginBottom: '32px' }}>
             <Box sx={{ marginBottom: '20px' }}>{parsedData.en}</Box>
             <Box>訳: {parsedData.ja}</Box>
           </Box>

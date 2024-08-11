@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import OpenAI from 'openai';
 import { openAi } from '../../../main';
@@ -10,6 +10,7 @@ export const ExampleImage = () => {
   const {
     data: exampleSentenceImageData,
     refetch: refetchExampleSentenceImageData,
+    isLoading,
   } = useQuery<OpenAI.Images.ImagesResponse>({
     queryKey: ['exampleSentenceImage', searchWord],
     queryFn: async () => {
@@ -34,6 +35,14 @@ export const ExampleImage = () => {
       refetchExampleSentenceImageData();
     }
   }, [exampleSentence]);
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box>

@@ -61,7 +61,8 @@ export const ExampleSection = () => {
 
   const hasNoMeaningData =
     !wordMeaningData ||
-    ('success' in wordMeaningData && !wordMeaningData.success);
+    ('success' in wordMeaningData && !wordMeaningData.success) ||
+    !wordMeaningData.results;
   if (hasNoMeaningData) {
     return null;
   }

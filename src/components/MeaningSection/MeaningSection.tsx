@@ -7,7 +7,8 @@ export const MeaningSection = () => {
 
   const hasNoMeaningData =
     !wordMeaningData ||
-    ('success' in wordMeaningData && !wordMeaningData.success);
+    ('success' in wordMeaningData && !wordMeaningData.success) ||
+    !wordMeaningData.results;
   if (hasNoMeaningData) {
     return null;
   }
@@ -27,9 +28,6 @@ export const MeaningSection = () => {
 
       <Box fontSize="14px">
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {!('results' in wordMeaningData) && (
-            <Box>意味が取得できませんでした</Box>
-          )}
           {wordMeaningData.results?.map((result, i) => (
             <Box key={i}>
               <Box>[{result.partOfSpeech}]</Box>

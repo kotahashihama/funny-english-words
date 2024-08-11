@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { AppProvider } from './components/AppProvider/AppProvider';
+import OpenAI from 'openai';
 
 const queryClient = new QueryClient();
 const theme = createTheme({
@@ -15,6 +16,10 @@ const theme = createTheme({
       textTransform: 'none',
     },
   },
+});
+export const openAi = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
 });
 
 createRoot(document.getElementById('root')!).render(

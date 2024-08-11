@@ -10,40 +10,47 @@ import { useGetExampleSentence } from '../../api/useGetExampleSentence';
 import { AppContext } from '../AppProvider/AppProvider';
 import { ExampleImage } from './ExampleImage/ExampleImage';
 
-export const ExampleSection = () => {
-  const { wordMeaningData, searchWord, setExampleSentence } =
-    useContext(AppContext);
-
-  const {
-    data: exampleSentenceData,
-    refetch: refetchExampleSentenceData,
-    isLoading,
-  } = useGetExampleSentence(searchWord);
-
-  const parsedData: {
-    en: string;
-    ja: string;
-  } = JSON.parse(exampleSentenceData?.choices[0].message.content || '{}');
-
-  useEffect(() => {
-    if (parsedData) setExampleSentence(parsedData.ja);
-  }, [parsedData]);
+const GenerateButton = () => {
+  const { searchWord } = useContext(AppContext);
+  const { refetch: refetchExampleSentenceData, isLoading } =
+    useGetExampleSentence(searchWord);
 
   const onClickGenerate = () => {
     refetchExampleSentenceData();
   };
 
+  return (
+    <Button
+      variant="contained"
+      sx={{ marginBottom: '20px' }}
+      onClick={onClickGenerate}
+      disabled={isLoading}
+    >
+      例文を生成
+    </Button>
+  );
+};
+
+export const ExampleSection = () => {
+  const { wordMeaningData, searchWord, setExampleSentence } =
+    useContext(AppContext);
+
+  const { data: exampleSentenceData, isLoading } =
+    useGetExampleSentence(searchWord);
+  const parsedExampleSentenceData: {
+    en: string;
+    ja: string;
+  } = JSON.parse(exampleSentenceData?.choices[0].message.content || '{}');
+
+  useEffect(() => {
+    if (parsedExampleSentenceData)
+      setExampleSentence(parsedExampleSentenceData.ja);
+  }, [parsedExampleSentenceData]);
+
   if (isLoading) {
     return (
       <>
-        <Button
-          variant="contained"
-          sx={{ marginBottom: '20px' }}
-          onClick={onClickGenerate}
-          disabled={isLoading}
-        >
-          例文を生成
-        </Button>
+        <GenerateButton />
 
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <CircularProgress />
@@ -61,27 +68,12 @@ export const ExampleSection = () => {
   }
 
   if (!exampleSentenceData) {
-    return (
-      <Button
-        variant="contained"
-        sx={{ marginBottom: '20px' }}
-        onClick={onClickGenerate}
-        disabled={isLoading}
-      >
-        例文を生成
-      </Button>
-    );
+    return <GenerateButton />;
   }
 
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{ marginBottom: '20px' }}
-        onClick={onClickGenerate}
-      >
-        例文を生成
-      </Button>
+      <GenerateButton />
 
       <Paper sx={{ padding: '24px' }}>
         <Typography
@@ -101,9 +93,9 @@ export const ExampleSection = () => {
                 fontWeight: 'bold',
               }}
             >
-              {parsedData.en}
+              {parsedExampleSentenceData.en}
             </Box>
-            <Box>{parsedData.ja}</Box>
+            <Box>{parsedExampleSentenceData.ja}</Box>
           </Box>
 
           <ExampleImage />

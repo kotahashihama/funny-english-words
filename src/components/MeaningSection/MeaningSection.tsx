@@ -41,10 +41,10 @@ export const MeaningSection = () => {
     );
   }
 
-  const hasNoMeaningData =
+  const hasNoMeanings =
     ('success' in wordMeaningData && !wordMeaningData.success) ||
     !wordMeaningData.results;
-  if (hasNoMeaningData) {
+  if (hasNoMeanings) {
     return (
       <Paper sx={{ marginBottom: '48px', padding: '24px' }}>
         ごめんなさい、単語「{searchWord}」に関するデータが見つかりませんでした。

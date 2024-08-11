@@ -6,6 +6,10 @@ import { useGetRandomWords } from '../../api/useGetRandomWords';
 import { AppContext } from '../AppProvider/AppProvider';
 import { useGetWordMeanings } from '../../api/useGetWordMeanings';
 
+const validateInput = (value: string) => {
+  return /^[a-zA-Z]*$/.test(value);
+};
+
 export const SearchSection = () => {
   const [inputWord, setInputWord] = useState<string>('');
   const [inputError, setInputError] = useState(false);
@@ -19,13 +23,10 @@ export const SearchSection = () => {
   } = useGetRandomWords();
   const { isLoading: isLoadingWordMeanings } = useGetWordMeanings(searchWord);
 
-  const validateInput = (value: string) => {
-    return /^[a-zA-Z]*$/.test(value);
-  };
-
   const onChangeInputWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputWord(newValue);
+
     if (validateInput(newValue)) {
       setInputError(false);
     } else {
@@ -111,17 +112,17 @@ export const SearchSection = () => {
           textAlign: 'center',
         }}
       >
-        {isLoadingRandomWords && (
+        {isLoadingRandomWords ? (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
           </Box>
-        )}
-        {!isLoadingRandomWords &&
+        ) : (
           randomWords?.map((word: string) => (
             <Button key={word} onClick={() => onClickRandomWord(word)}>
               {word}
             </Button>
-          ))}
+          ))
+        )}
         <IconButton onClick={onClickRefreshRandomWords}>
           <Refresh />
         </IconButton>

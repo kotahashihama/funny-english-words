@@ -1,50 +1,149 @@
-import './App.css';
+import {
+  Box,
+  createTheme,
+  Paper,
+  TextField,
+  ThemeProvider,
+  Typography,
+} from '@mui/material';
+
+import Button from '@mui/material/Button';
+
+const theme = createTheme({
+  typography: {
+    button: {
+      textTransform: 'none',
+    },
+  },
+});
 
 function App() {
   return (
-    <>
-      <div>Funny English Words</div>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ margin: '100px auto 0', width: '680px' }}>
+        <Box
+          sx={{
+            marginBottom: '48px',
+          }}
+        >
+          <Typography
+            fontSize="48px"
+            sx={{
+              marginBottom: '28px',
+              textAlign: 'center',
+              fontFamily: 'Ribeye Marrow, serif',
+            }}
+          >
+            Funny English Words
+          </Typography>
 
-      <div>
-        <input type="text" />
-        <button>検索</button>
-      </div>
+          <Box
+            sx={{
+              display: 'flex',
+              marginBottom: '32px',
+              width: '100%',
+              justifyContent: 'center',
+            }}
+          >
+            <TextField
+              id="standard-basic"
+              label="単語を入力"
+              sx={{
+                marginRight: '16px',
+                width: '400px',
+                '& .MuiInputBase-input': {
+                  background: '#fff',
+                },
+              }}
+            />
+            <Button variant="contained">検索</Button>
+          </Box>
 
-      <div>
-        <div>この単語を検索:</div>
-        <div>
-          <button>applaud</button>
-          <button>immigrate</button>
-          <button>mirror</button>
-          <button>foodie</button>
-          <button>sophisticated</button>
-        </div>
-      </div>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '8px',
+              textAlign: 'center',
+            }}
+          >
+            <Button>applaud</Button>
+            <Button>immigrate</Button>
+            <Button>mirror</Button>
+            <Button>foodie</Button>
+            <Button>sophisticated</Button>
+          </Box>
+        </Box>
 
-      <div>
-        <div>applaud 【動詞】</div>
-        <div>
-          <div>
-            <div>自動:</div>
-            <div>拍手［称賛］する</div>
-          </div>
+        <Paper sx={{ marginBottom: '48px', padding: '24px' }}>
+          <Typography
+            fontSize="24px"
+            fontWeight="bold"
+            sx={{ marginBottom: '20px' }}
+          >
+            applaud とは
+          </Typography>
 
-          <div>
-            <div>他動:</div>
-            <div>〔～に〕拍手を送る、〔～を〕称賛する</div>
-          </div>
-        </div>
-      </div>
+          <Box fontSize="14px">
+            <Box
+              sx={{
+                marginBottom: '20px',
+              }}
+            >
+              applaud 【動詞】
+            </Box>
 
-      <div>
-        <div>この単語の使い方</div>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Box>
+                <Box>自動:</Box>
+                <Box>拍手［称賛］する</Box>
+              </Box>
 
-        <div>
-          <div>例文</div>
-          <div>画像</div>
-        </div>
-      </div>
-    </>
+              <Box>
+                <Box>他動:</Box>
+                <Box>〔～に〕拍手を送る、〔～を〕称賛する</Box>
+              </Box>
+            </Box>
+          </Box>
+        </Paper>
+
+        <Button variant="contained" sx={{ marginBottom: '20px' }}>
+          例文を生成
+        </Button>
+
+        <Paper sx={{ padding: '24px' }}>
+          <Typography
+            fontSize="24px"
+            fontWeight="bold"
+            sx={{ marginBottom: '20px' }}
+          >
+            例文
+          </Typography>
+
+          <Box fontSize="14px">
+            <Box sx={{ marginBottom: '20px' }}>
+              <Box sx={{ marginBottom: '20px' }}>
+                The city's squirrels learned to{' '}
+                <span style={{ color: '#dd4e4e' }}>
+                  <b>applaud</b>
+                </span>{' '}
+                by clapping acorns together, leading to standing ovations for
+                particularly impressive parkour performances among the trees.
+              </Box>
+
+              <Box>
+                訳:
+                街のリスたちがドングリをパンパンして拍手する技を覚えちゃってさ。木の間を飛び回る超絶パルクールに大喝采するようになったんだって。
+              </Box>
+            </Box>
+
+            <Box>
+              <img src="./example.webp" style={{ maxWidth: '100%' }}></img>
+            </Box>
+          </Box>
+        </Paper>
+      </Box>
+    </ThemeProvider>
   );
 }
 

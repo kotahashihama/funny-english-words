@@ -1,50 +1,43 @@
-# React + TypeScript + Vite
+# 概要
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Open API マッシュアップアプリケーション「Funny English Words」
 
-Currently, two official plugins are available:
+# 環境構築
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- node@v22.3.0
+- bun@1.1.13
 
-## Expanding the ESLint configuration
+## 依存ライブラリの導入
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```sh
+bun i
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 環境変数
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```sh
+cp .env.template .env # env ファイルを作成
 ```
+
+`.env` を編集して各環境変数に値をセットしてください。
+
+- `VITE_X_RAPIDAPI_HOST`
+- `VITE_X_RAPIDAPI_KEY`
+
+RapidAPI の API キーです。以下を参考に取得してください。
+
+https://docs.rapidapi.com/docs/configuring-api-security
+
+- `VITE_OPENAI_API_KEY`
+
+OpenAI の API キーです。以下を参考に取得してください。
+
+https://platform.openai.com/docs/quickstart
+
+## アプリケーションサーバーの起動
+
+```sh
+bun dev
+```
+
+http://localhost:5173 で閲覧できます。

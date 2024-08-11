@@ -1,12 +1,42 @@
 import { Box, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext } from 'react';
 import { AppContext } from '../AppProvider/AppProvider';
 
+type GetRandomWordResponse = string[] | undefined;
+export type GetWordMeaningResponse =
+  | {
+      success: true;
+      frequency: number;
+      pronunciation: {
+        all: string;
+      };
+      results?: {
+        antonyms?: string[];
+        definition: string;
+        derivation?: string[];
+        examples: string[];
+        partOfSpeech: string | null;
+        similarTo: string[];
+        synonyms?: string[];
+      }[];
+      syllables?: {
+        count: number;
+        list: string[];
+      };
+      word: string;
+    }
+  | {
+      success: false;
+      message: string;
+    }
+  | undefined;
+
 export const SearchSection = () => {
-  const { searchWord, setSearchWord } = useContext(AppContext);
-  const { data: searchWordData, refetch } = useQuery({
+  const { searchWord, setSearchWord, setWordMeaningData } =
+    useContext(AppContext);
+  const { refetch } = useQuery<GetWordMeaningResponse>({
     queryKey: ['searchWord', searchWord],
     queryFn: async () => {
       return (
@@ -21,7 +51,7 @@ export const SearchSection = () => {
     enabled: false,
   });
 
-  const { data: randomWords } = useQuery({
+  const { data: randomWords } = useQuery<GetRandomWordResponse>({
     queryKey: ['randomWords'],
     queryFn: async () => {
       return (
@@ -30,25 +60,20 @@ export const SearchSection = () => {
     },
   });
 
+  const performSearch = useCallback(async () => {
+    if (searchWord) {
+      const { data } = await refetch();
+      setWordMeaningData(data);
+    }
+  }, [searchWord, refetch, setWordMeaningData]);
+
   const onClickSearch = () => {
     performSearch();
   };
 
-  const onClickRandomWord = (word: string) => {
+  const onClickRandomWord = async (word: string) => {
     setSearchWord(word);
   };
-
-  const performSearch = useCallback(() => {
-    if (searchWord) refetch();
-  }, [searchWord, refetch]);
-
-  useEffect(() => {
-    if (searchWord) {
-      performSearch();
-    }
-  }, [searchWord, performSearch]);
-
-  console.log(searchWordData);
 
   return (
     <Box

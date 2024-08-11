@@ -29,11 +29,26 @@ export const ExampleSection = () => {
     if (parsedData) setExampleSentence(parsedData.ja);
   }, [parsedData]);
 
+  const onClickGenerate = () => {
+    refetchExampleSentenceData();
+  };
+
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <CircularProgress />
-      </Box>
+      <>
+        <Button
+          variant="contained"
+          sx={{ marginBottom: '20px' }}
+          onClick={onClickGenerate}
+          disabled={isLoading}
+        >
+          例文を生成
+        </Button>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      </>
     );
   }
 
@@ -45,16 +60,13 @@ export const ExampleSection = () => {
     return null;
   }
 
-  const onClickGenerate = () => {
-    refetchExampleSentenceData();
-  };
-
   if (!exampleSentenceData) {
     return (
       <Button
         variant="contained"
         sx={{ marginBottom: '20px' }}
         onClick={onClickGenerate}
+        disabled={isLoading}
       >
         例文を生成
       </Button>

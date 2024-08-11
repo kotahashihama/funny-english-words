@@ -1,6 +1,7 @@
-import { Box, Paper, Typography } from '@mui/material';
-import { useContext } from 'react';
+import { Box, CircularProgress, Paper, Typography } from '@mui/material';
+import { useContext, useEffect } from 'react';
 import { AppContext } from '../AppProvider/AppProvider';
+import { useGetWordMeanings } from '../../api/useGetWordMeanings';
 
 const partOfSpeechMap: Record<string, string> = {
   noun: '名詞',
@@ -14,14 +15,33 @@ const partOfSpeechMap: Record<string, string> = {
 };
 
 export const MeaningSection = () => {
-  const { searchWord, wordMeaningData } = useContext(AppContext);
+  const { searchWord, wordMeaningData, setWordMeaningData } =
+    useContext(AppContext);
+  const { refetch: refetchWordMeanings, isLoading } =
+    useGetWordMeanings(searchWord);
+
+  useEffect(() => {
+    (async () => {
+      if (searchWord) {
+        const { data } = await refetchWordMeanings();
+        setWordMeaningData(data);
+      }
+    })();
+  }, [searchWord]);
 
   if (!searchWord) {
     return null;
   }
 
+  if (!wordMeaningData || isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   const hasNoMeaningData =
-    !wordMeaningData ||
     ('success' in wordMeaningData && !wordMeaningData.success) ||
     !wordMeaningData.results;
   if (hasNoMeaningData) {

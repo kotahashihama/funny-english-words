@@ -1,9 +1,9 @@
+import { Refresh } from '@mui/icons-material';
 import { Box, IconButton, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../AppProvider/AppProvider';
-import { Refresh } from '@mui/icons-material';
 
 type GetRandomWordResponse = string[] | undefined;
 export type GetWordMeaningsResponse =
@@ -35,6 +35,7 @@ export type GetWordMeaningsResponse =
   | undefined;
 
 export const SearchSection = () => {
+  const [inputWord, setInputWord] = useState<string>('');
   const { searchWord, setSearchWord, setWordMeaningData } =
     useContext(AppContext);
   const { refetch: refetchWordMeanings } = useQuery<GetWordMeaningsResponse>({
@@ -62,19 +63,22 @@ export const SearchSection = () => {
       },
     });
 
-  const performSearch = useCallback(async () => {
-    if (searchWord) {
-      const { data } = await refetchWordMeanings();
-      setWordMeaningData(data);
-    }
-  }, [searchWord, refetchWordMeanings, setWordMeaningData]);
+  useEffect(() => {
+    (async () => {
+      if (searchWord) {
+        const { data } = await refetchWordMeanings();
+        setWordMeaningData(data);
+      }
+    })();
+  }, [searchWord]);
 
   const onClickSearch = () => {
-    performSearch();
+    setSearchWord(inputWord);
   };
 
   const onClickRandomWord = async (word: string) => {
     setSearchWord(word);
+    setInputWord(word);
   };
 
   const onClickRefreshRandomWords = () => {
@@ -105,8 +109,8 @@ export const SearchSection = () => {
               background: '#fff',
             },
           }}
-          value={searchWord}
-          onChange={(e) => setSearchWord(e.target.value)}
+          value={inputWord}
+          onChange={(e) => setInputWord(e.target.value)}
         />
         <Button variant="contained" onClick={onClickSearch}>
           検索

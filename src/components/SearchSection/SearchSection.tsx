@@ -87,7 +87,7 @@ export const SearchSection = () => {
           error={inputError}
           value={inputWord}
           onChange={onChangeInputWord}
-          onKeyPress={onKeyPress}
+          onKeyPress={onKeyPress} // NOTE: onKeyPress は deprecated であるが、代替の API がないため使用
           helperText={inputError ? '英字のみ入力が可能です' : ''}
           InputProps={{
             inputProps: {

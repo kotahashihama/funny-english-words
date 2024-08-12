@@ -5,15 +5,17 @@ import { AppContext } from '../AppProvider/AppProvider';
 import { Error } from '../Error/Error';
 import { ExampleImage } from './ExampleImage/ExampleImage';
 import { GenerateButton } from './GenerateButton/GenerateButton';
+import { useGetWordMeanings } from '../../api/useGetWordMeanings';
 
 export const ExampleSection = () => {
   const { wordMeaningData, searchWord, setExampleSentence } =
     useContext(AppContext);
 
+  const { isLoading: isLoadingWordMeanings } = useGetWordMeanings(searchWord);
   const {
     data: exampleSentenceData,
     refetch: refetchExampleSentenceData,
-    isLoading,
+    isLoading: isLoadingExampleSentence,
     isError,
   } = useGetExampleSentence(searchWord);
   const parsedExampleSentenceData: {
@@ -26,7 +28,11 @@ export const ExampleSection = () => {
       setExampleSentence(parsedExampleSentenceData.ja);
   }, [parsedExampleSentenceData]);
 
-  if (isLoading) {
+  if (isLoadingWordMeanings) {
+    return null;
+  }
+
+  if (isLoadingExampleSentence) {
     return (
       <>
         <GenerateButton />

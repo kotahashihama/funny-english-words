@@ -29,7 +29,7 @@ export const ExampleImage = () => {
   }
 
   if (isError) {
-    return <Error onClick={() => refetchExampleSentenceImageData} />;
+    return <Error onClick={() => refetchExampleSentenceImageData()} />;
   }
 
   return (

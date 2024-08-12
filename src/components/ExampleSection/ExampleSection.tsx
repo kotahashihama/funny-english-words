@@ -65,7 +65,7 @@ export const ExampleSection = () => {
   }
 
   if (isError) {
-    return <Error onClick={() => refetchExampleSentenceData} />;
+    return <Error onClick={() => refetchExampleSentenceData()} />;
   }
 
   const hasNoMeaningData =

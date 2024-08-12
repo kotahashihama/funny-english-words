@@ -88,7 +88,7 @@ export const SearchSection = () => {
           value={inputWord}
           onChange={onChangeInputWord}
           onKeyPress={onKeyPress}
-          helperText={inputError ? '英字のみ入力可能です' : ''}
+          helperText={inputError ? '英字のみ入力が可能です' : ''}
           InputProps={{
             inputProps: {
               pattern: '^[a-zA-Z]*$',

@@ -11,6 +11,7 @@ export const Error = ({ onClick }: Props) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        textAlign: 'center',
       }}
     >
       <Typography sx={{ marginBottom: '16px' }}>

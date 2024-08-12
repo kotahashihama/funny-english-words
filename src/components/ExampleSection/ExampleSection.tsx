@@ -1,36 +1,10 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Paper,
-  Typography,
-} from '@mui/material';
+import { Box, CircularProgress, Paper, Typography } from '@mui/material';
 import { useContext, useEffect } from 'react';
 import { useGetExampleSentence } from '../../api/useGetExampleSentence';
 import { AppContext } from '../AppProvider/AppProvider';
-import { ExampleImage } from './ExampleImage/ExampleImage';
 import { Error } from '../Error/Error';
-
-const GenerateButton = () => {
-  const { searchWord } = useContext(AppContext);
-  const { refetch: refetchExampleSentenceData, isLoading } =
-    useGetExampleSentence(searchWord);
-
-  const onClickGenerate = () => {
-    refetchExampleSentenceData();
-  };
-
-  return (
-    <Button
-      variant="contained"
-      sx={{ marginBottom: '20px' }}
-      onClick={onClickGenerate}
-      disabled={isLoading}
-    >
-      例文を生成
-    </Button>
-  );
-};
+import { ExampleImage } from './ExampleImage/ExampleImage';
+import { GenerateButton } from './GenerateButton/GenerateButton';
 
 export const ExampleSection = () => {
   const { wordMeaningData, searchWord, setExampleSentence } =
